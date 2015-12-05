@@ -99,7 +99,7 @@ public class MDElgamal {
 		int i=0,k=0;
 		
 		
-		//algoritmo de concatenação
+		//-------------algoritmo de concatenação de pares-----------------//
 		if(i==0){
 			valor[i] = Integer.parseInt((copy[i].concat(copy[i+1])));
 			k=i+1;
@@ -113,6 +113,7 @@ public class MDElgamal {
 			}
 			k=k+2;
 		}
+		//----------------------------------------------------------------//
 		
 		return valor;
 		
