@@ -1,6 +1,8 @@
 import java.util.*;
 import java.math.*;
 
+import javax.swing.InternalFrameFocusTraversalPolicy;
+
 /**
  * 
  * @author Matt_lackome
@@ -23,7 +25,10 @@ public class MDElgamal {
 	String[] textConvertido;
 	int tamanhoText;
 	double a, r, p, b;
-	String P = "2539";
+	int R;
+	
+	Random rand = new Random();
+	
 	
 	/**
 	 * convertText converte uma string lida para um padrão de valores pré-setados
@@ -37,9 +42,11 @@ public class MDElgamal {
 	void convertText(String text){
 		text = text.toUpperCase();
 		this.tamanhoText = text.length();
+		this.textConvertido = new String[this.tamanhoText];
 		for(int i=0;i<text.length();i++){
-			for(int j=0;i<27;j++){
+			for(int j=0;j<27;j++){
 				if(text.substring(i, i+1).equals(alfabeto[j])){
+					System.out.println();
 					this.textConvertido[i] = this.ValorAlfab[j];
 				}
 			}
@@ -82,13 +89,33 @@ public class MDElgamal {
 //		return k;
 //	}
 	
-	void encriptText(){
-		String[] copy = this.textConvertido;
-		String[] convert;
+	int[] encriptText(){
 		
-		for(int i=0;i<this.tamanhoText;i++){
-			convert[i] = copy[i].concat(copy[i+1]);
+		this.R = rand.nextInt((int)(this.p - 1));
+		int x = Math.round(tamanhoText/2);
+		
+		String[] copy = this.textConvertido;
+		int[] valor = new int[x+1];
+		int i=0,k=0;
+		
+		
+		//algoritmo de concatenação
+		if(i==0){
+			valor[i] = Integer.parseInt((copy[i].concat(copy[i+1])));
+			k=i+1;
+		}while(k<tamanhoText+1){
+			i++;
+			if( (k+2 != tamanhoText) && ( (k+2) <= tamanhoText )){
+				valor[i] = Integer.parseInt((copy[k+1].concat(copy[k+2])));
+			}
+			else if(k+1 < tamanhoText+1){
+				valor[i] = Integer.parseInt(copy[k+1]);
+			}
+			k=k+2;
 		}
+		
+		return valor;
+		
 	}
 	
 	
@@ -121,12 +148,17 @@ public class MDElgamal {
 		 * pré-definido
 		 */
 		
-		//ok.convertText(text);
+		ok.convertText(text);
 		
 		
-		System.out.println(text);
 		
+		int[] n = ok.encriptText();
 		
+		for(int i=0;i<3;i++){
+			System.out.println(n[i]);
+		}
 	}
-
+		
 }
+
+
