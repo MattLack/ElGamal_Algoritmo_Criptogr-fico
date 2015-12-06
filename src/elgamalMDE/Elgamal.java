@@ -59,7 +59,8 @@ public class Elgamal {
 						this.textBlocado.add(n, (this.textConvertido.get(n)) );
 				}else if(!this.textConvertido.get(n).isEmpty()){
 					x = Integer.parseInt(this.textConvertido.get(n));
-
+					//aqui tem q verificar se o próximo já é nulo ou não, se não for
+					//repete todo o processo de novo e de novo e de novo
 				}
 			}else if(x<p){                                                    //caso1 <-
 				this.textBlocado.add(n, (this.textConvertido.get(n).concat(this.textConvertido.get(n+1))) );
@@ -76,7 +77,8 @@ public class Elgamal {
 					}else if(x>p){
 						this.textBlocado.add(n, this.textConvertido.get(n));
 						n++;
-						
+						//aqui tem q verificar se o próximo já é nulo ou não, se não for
+						//repete todo o processo de novo e de novo e de novo
 					}
 				}else{
 					this.textBlocado.add(n, this.textConvertido.get(n));
