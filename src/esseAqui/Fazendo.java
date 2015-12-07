@@ -14,25 +14,27 @@ public class Fazendo {
 	private String padrao = "999";
 	
 	private int tamanhoText;
-	private Long a, r, p, b;
+	private Long p, k , g , r;
 	private Long randB;
 	private Long Y, G;
 	private Long s;
 	private Random rand = new Random();
 	
-	void generateKey(Long a, Long r, Long p){
+	//
+	
+	void generateKey(Long k, Long g, Long p){
 		
-		this.a = a;
-		this.r = r;
+		this.k = k;
+		this.g = g;
 		this.p = p;
 		
-		Long c1 = (long) Math.pow(r, a); 
+		Long c1 = (long) Math.pow(g, k); 
 		Long c2 = c1 % p;
-		this.b = c2;
+		this.r = c2;
 		
-		//b = rª mod p
-		//chaves públicas são (b,r,p)
-		//chave privada é (a)
+		//r = g^k mod p
+		//chaves públicas são (r,g,p)
+		//chave privada é (k)
 		
 	}
 	
@@ -70,29 +72,17 @@ public class Fazendo {
 	}
 	
 	
-	public static long MDC(long a, long b){
-	    long resto;
-
-	    while(b != 0){
-	      resto = a % b;
-	      a = b;
-	      b = resto;
-	    }
-
-	    return a;
-	  }
 	
-	
-	void encrypt(Long b, Long r, Long p){
+	void encrypt(Long r, Long g, Long p){
 		
 		this.randB = (long) rand.nextInt((int) (this.p-1));
-		long aux = (long) Math.pow(r, randB);
+		long aux = (long) Math.pow(g, randB);
 		this.s = aux%this.p;
-		//s = r^ranB mod p
+		//s = g^ranB mod p
 		
-		long n = (long) Math.pow(b, this.randB);
+		long n = (long) Math.pow(r, this.randB);
 		long x = (this.textCODIGO*n) %p;
-		//y= textCODIGO* b^randB mod p
+		//y= textCODIGO* r^randB mod p
 		
 		this.Y = x;
 		//Y será o texo cifrado
@@ -102,9 +92,10 @@ public class Fazendo {
 	
 	
 	void decrypt(Long s,Long V){
-		long aux = (long) Math.pow(s, (this.p)-1-this.a);
+		long w = this.p -1 -this.k;
+		long aux = (long) Math.pow(s, w);
 		long y = aux % this.p;
-		//y = s^(p-1-a) mod p
+		//y = s^(p-1-k) mod p
 		
 		long q = y*V;
 		this.G = q % p;
@@ -121,8 +112,8 @@ public class Fazendo {
 		return this.Y;
 	}
 	
-	public Long getB(){
-		return this.b;
+	public Long getR(){
+		return this.r;
 	}
 	
 	public Long getG(){
@@ -137,19 +128,19 @@ public class Fazendo {
 		
 		Scanner teclado = new Scanner(System.in);
 		Fazendo elgamal = new Fazendo();
-		Long a = (long) 14, r = (long) 2, p = (long) 2539;
+		Long k = (long) 14, g = (long) 2, p = (long) 2539;
 		
 		
-		elgamal.generateKey(a, r, p);
+		elgamal.generateKey(k, g, p);
 		
-		System.out.println("Chave privada: "+a);
-		System.out.println("Chaves publicas: ("+elgamal.getB()+","+r+","+p+")");
+		System.out.println("Chave privada: "+k);
+		System.out.println("Chaves publicas: ("+elgamal.getR()+","+g+","+p+")");
 		
 		System.out.println("Digite as chaves publicas em respectiva ordem:");
-		System.out.println("Valor para b:");
-		Long valorB = (long) teclado.nextInt();
 		System.out.println("Valor para r:");
 		Long valorR = (long) teclado.nextInt();
+		System.out.println("Valor para g:");
+		Long valorG = (long) teclado.nextInt();
 		System.out.println("Valor para p:");
 		Long valorP = (long) teclado.nextInt();
 		
@@ -159,16 +150,14 @@ public class Fazendo {
 		
 		elgamal.convertText(text);
 		
-		System.out.println(elgamal.textoCOD);
-		
-		elgamal.encrypt(valorB,valorR,valorP);
+		elgamal.encrypt(valorR,valorG,valorP);
 		
 		System.out.println("Texto cifrado: ("+elgamal.getS()+","+elgamal.getY()+")");
 		
 		
-		System.out.println(elgamal.textoCOD);
+		System.out.println("E pra dar isso: "+elgamal.textoCOD);
 		elgamal.decrypt(elgamal.getS(), elgamal.getY());
-		System.out.println(elgamal.getG());
+		System.out.println("Ta dando isso: "+elgamal.getG());
 		
 		
 		
